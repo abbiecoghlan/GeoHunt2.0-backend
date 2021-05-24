@@ -14,7 +14,7 @@ Geo Hunt 2.0 will be an interactive, location-based geography trivia game. Users
 - Boostrap CSS
 - Google Maps API 
 
-## 🚀 Planned Features
+## ⚡️  Planned Features
 - TBD  
 
 <!-- ## ⚡️ Installation
