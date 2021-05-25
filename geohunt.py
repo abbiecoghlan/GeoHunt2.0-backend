@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'password'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/test.db'
 db = SQLAlchemy(app)
 
 class UserModel(db.Model):
@@ -11,11 +11,16 @@ class UserModel(db.Model):
     username = db.Column(db.String(12))
 
     def __str__(self):
-        return f'{self.content, {self.id}}'
+        return f'{self.content}, {self.id}'
 
 @app.route('/')
 def hello():
     return 'Welcome to Geo Hunt!'
+
+@app.route('/<int:id>')
+def profile(id):
+    username = UserModel.query.filter_by(id=id).first().username
+    return f'Hello {username}'
 
 @app.route('/<name>')
 def greet(name):
