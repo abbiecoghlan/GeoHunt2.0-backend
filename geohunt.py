@@ -13,20 +13,26 @@ class UserModel(db.Model):
     def __str__(self):
         return f'{self.content}, {self.id}'
 
-@app.route('/', methods=['GET'])
+@app.route('/geohunt', methods=['GET'])
 def index():
     return {
-        'message': 'Welcome to Geo Hunt!'
+        'message': 'Welcome to Geo Hunt, abbie!',
+        "name": "Abbie"
     }
 
 @app.route('/<int:id>')
 def profile(id):
     username = UserModel.query.filter_by(id=id).first().username
-    return f'Hello {username}'
+    return {
+        'message': 'Welcome to Geo Hunt, abbie!',
+        "name": f'{username}'
+    }
 
 @app.route('/<name>')
 def greet(name):
     return f'Hello {name}'
+
+
 
 @app.route('/another')
 def anotherPage():
