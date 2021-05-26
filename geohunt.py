@@ -13,9 +13,11 @@ class UserModel(db.Model):
     def __str__(self):
         return f'{self.content}, {self.id}'
 
-@app.route('/')
-def hello():
-    return 'Welcome to Geo Hunt!'
+@app.route('/', methods=['GET'])
+def index():
+    return {
+        'message': 'Welcome to Geo Hunt!'
+    }
 
 @app.route('/<int:id>')
 def profile(id):
