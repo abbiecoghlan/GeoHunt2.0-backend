@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy 
 
 app = Flask(__name__)
@@ -11,7 +11,14 @@ class UserModel(db.Model):
     username = db.Column(db.String(12))
 
     def __str__(self):
-        return f'{self.content}, {self.id}'
+        return f'{self.username}, {self.id}'
+
+def user_serializer(user):
+    return {
+        'id': user.id,
+        'username': user.username 
+    }
+
 
 @app.route('/geohunt', methods=['GET'])
 def index():
