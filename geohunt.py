@@ -19,9 +19,12 @@ def user_serializer(user):
         'username': user.username 
     }
 
+@app.route('/users', methods=['GET'])
+def index():
+    return jsonify([*map(user_serializer, UserModel.query.all())])
 
 @app.route('/geohunt', methods=['GET'])
-def index():
+def example():
     return {
         'message': 'Welcome to Geo Hunt, abbie!',
         "name": "Abbie"
