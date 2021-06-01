@@ -34,11 +34,12 @@ def index():
 
 @app.route('/users/<int:id>')
 def profile(id):
+    # return jsonify([*map(user_serializer, UserModel.query.filter_by(id=id))])
     username = UserModel.query.filter_by(id=id).first().username
-
     return {
         "username": f'{username}'
     }
+
 
 @app.route('/geohunt', methods=['GET'])
 def example():
