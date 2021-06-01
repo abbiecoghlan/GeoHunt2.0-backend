@@ -32,13 +32,20 @@ def index():
             'name' : user.username
         }
 
-@app.route('/users/<int:id>')
+@app.route('/users/<int:id>', methods=['GET', 'DELETE'])
 def profile(id):
+    if request.method == 'GET':
     # return jsonify([*map(user_serializer, UserModel.query.filter_by(id=id))])
-    username = UserModel.query.filter_by(id=id).first().username
-    return {
-        "username": f'{username}'
-    }
+        username = UserModel.query.filter_by(id=id).first().username
+        return {
+            "username": f'{username}'
+        }
+    if request.method == 'DELETE':
+        UserModel.query.filter_by(id=id).delete()
+        db.session.commit()
+        return {
+            '204': 'Deleted successfully'
+        }
 
 
 @app.route('/geohunt', methods=['GET'])
