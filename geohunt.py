@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, json
 from flask_sqlalchemy import SQLAlchemy 
 
 app = Flask(__name__)
@@ -19,9 +19,18 @@ def user_serializer(user):
         'username': user.username 
     }
 
-@app.route('/users', methods=['GET'])
+@app.route('/users', methods=['GET', 'POST'])
 def index():
-    return jsonify([*map(user_serializer, UserModel.query.all())])
+    if request.method == 'GET':
+        return jsonify([*map(user_serializer, UserModel.query.all())])
+    if request.method == 'POST':
+        request_data = json.loads(request.data)
+        user = UserModel(username=request_data['username'])
+        db.session.add(user)
+        db.session.commit()
+        return {
+            'name' : user.username
+        }
 
 @app.route('/geohunt', methods=['GET'])
 def example():
