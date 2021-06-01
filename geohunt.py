@@ -32,6 +32,14 @@ def index():
             'name' : user.username
         }
 
+@app.route('/users/<int:id>')
+def profile(id):
+    username = UserModel.query.filter_by(id=id).first().username
+
+    return {
+        "username": f'{username}'
+    }
+
 @app.route('/geohunt', methods=['GET'])
 def example():
     return {
@@ -39,13 +47,6 @@ def example():
         "name": "Abbie"
     }
 
-@app.route('/<int:id>')
-def profile(id):
-    username = UserModel.query.filter_by(id=id).first().username
-    return {
-        'message': 'Welcome to Geo Hunt, abbie!',
-        "name": f'{username}'
-    }
 
 @app.route('/<name>')
 def greet(name):
