@@ -22,6 +22,17 @@ def user_serializer(user):
         'username': user.username 
     }
 
+class Puzzle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(30))
+    location_name = db.Column(db.String(30))
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    radius_limit = db.Column(db.Float)
+
+
+
+
 
 
 
