@@ -30,6 +30,9 @@ class Puzzle(db.Model):
     longitude = db.Column(db.Float)
     radius_limit = db.Column(db.Float)
 
+##for printing
+    def __str__(self):
+        return f'{self.id}, {self.title}, {self.location_name}, {self.latitude}, {self.longitude}, {self.radius_limit}'
 
 
 
