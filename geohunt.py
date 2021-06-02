@@ -19,9 +19,15 @@ def user_serializer(user):
         'username': user.username 
     }
 
-# class Attempt(db.model):
+# attempt = Table(db.model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     status = db.Column(db.String(15))
+
+# attempt = Table(db.model):
+    # puzzle key
+    # user key
+    # status
+    # time_taken
     
 
 @app.route('/users', methods=['GET', 'POST'])
