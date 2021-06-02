@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'password'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/database.db'
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -22,10 +22,10 @@ def user_serializer(user):
 @app.route('/users', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        return jsonify([*map(user_serializer, UserModel.query.all())])
+        return jsonify([*map(user_serializer, User.query.all())])
     if request.method == 'POST':
         request_data = json.loads(request.data)
-        user = UserModel(username=request_data['username'])
+        user = User(username=request_data['username'])
         db.session.add(user)
         db.session.commit()
         return {
@@ -35,13 +35,13 @@ def index():
 @app.route('/users/<int:id>', methods=['GET', 'DELETE'])
 def profile(id):
     if request.method == 'GET':
-    # return jsonify([*map(user_serializer, UserModel.query.filter_by(id=id))])
-        username = UserModel.query.filter_by(id=id).first().username
+    # return jsonify([*map(user_serializer, User.query.filter_by(id=id))])
+        username = User.query.filter_by(id=id).first().username
         return {
             "username": f'{username}'
         }
     if request.method == 'DELETE':
-        UserModel.query.filter_by(id=id).delete()
+        User.query.filter_by(id=id).delete()
         db.session.commit()
         return {
             '204': 'Deleted successfully'
