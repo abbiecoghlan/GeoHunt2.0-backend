@@ -19,6 +19,11 @@ def user_serializer(user):
         'username': user.username 
     }
 
+# class Attempt(db.model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     status = db.Column(db.String(15))
+    
+
 @app.route('/users', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
