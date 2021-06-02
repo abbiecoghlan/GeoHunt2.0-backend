@@ -9,15 +9,22 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(12))
+    first_name = db.Column(db.String(20))
+    last_name = db.Column(db.String(20))
 
+##for printing
     def __str__(self):
-        return f'{self.username}, {self.id}'
+        return f'{self.username}, {self.id}, {self.first_name}, {self.last_name}'
 
 def user_serializer(user):
     return {
         'id': user.id,
         'username': user.username 
     }
+
+
+
+
 
 # attempt = Table(db.model):
 #     id = db.Column(db.Integer, primary_key=True)
