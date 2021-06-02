@@ -34,6 +34,11 @@ class Puzzle(db.Model):
     def __str__(self):
         return f'{self.id}, {self.title}, {self.location_name}, {self.latitude}, {self.longitude}, {self.radius_limit}'
 
+def puzzle_serializer(puzzle):
+    return {
+        'id': puzzle.id,
+        'title': puzzle.title
+    }
 
 
 
