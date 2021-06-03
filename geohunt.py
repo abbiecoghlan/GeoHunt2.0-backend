@@ -6,11 +6,19 @@ app.config['SECRET_KEY'] = 'password'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/database.db'
 db = SQLAlchemy(app)
 
+attempts = db.Table('user_puzzle'):
+    id = db.Column(db.Integer, primary_key=True)
+    db.Column('puzzle_id', db.Integer, db.ForeignKey('puzzle.id'))
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+    status = db.Column(db.String(15))
+    # time_taken
+    
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(12))
     first_name = db.Column(db.String(20))
     last_name = db.Column(db.String(20))
+    attempts = db.relationship( 'Puzzle', secondary=attempts, backref='users', lazy='select')
 
 ##for printing
     def __str__(self):
@@ -30,6 +38,7 @@ class Puzzle(db.Model):
     longitude = db.Column(db.Float)
     radius_limit = db.Column(db.Float)
 
+
 ##for printing
     def __str__(self):
         return f'{self.id}, {self.title}, {self.location_name}, {self.latitude}, {self.longitude}, {self.radius_limit}'
@@ -45,18 +54,8 @@ def puzzle_serializer(puzzle):
     }
 
 
-attempt = db.Table('user_puzzle'):
-    id = db.Column(db.Integer, primary_key=True)
-    db.Column('puzzle_id', db.Integer, db.ForeignKey('puzzle.id'))
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-    status = db.Column(db.String(15))
 
-# attempt = Table(db.model):
-    # puzzle key
-    # user key
-    # status
-    # time_taken
-    
+
 
 @app.route('/users', methods=['GET', 'POST'])
 def index():
