@@ -37,7 +37,11 @@ class Puzzle(db.Model):
 def puzzle_serializer(puzzle):
     return {
         'id': puzzle.id,
-        'title': puzzle.title
+        'title': puzzle.title,
+        'location_name': puzzle.location_name,
+        'latitude': puzzle.latitude,
+        'longitude': puzzle.longitude,
+        'radius_limit': puzzle.radius_limit 
     }
 
 
