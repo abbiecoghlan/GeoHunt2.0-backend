@@ -6,11 +6,12 @@ app.config['SECRET_KEY'] = 'password'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/database.db'
 db = SQLAlchemy(app)
 
-attempts = db.Table('user_puzzle'):
-    id = db.Column(db.Integer, primary_key=True)
-    db.Column('puzzle_id', db.Integer, db.ForeignKey('puzzle.id'))
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-    status = db.Column(db.String(15))
+attempts = db.Table('user_puzzle',
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('puzzle_id', db.Integer, db.ForeignKey('puzzle.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('status', (db.String(15)))
+    )
     # time_taken
     
 class User(db.Model):
