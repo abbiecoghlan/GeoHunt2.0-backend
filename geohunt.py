@@ -45,13 +45,11 @@ def puzzle_serializer(puzzle):
     }
 
 
-
-
-
-
-# attempt = Table(db.model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     status = db.Column(db.String(15))
+attempt = db.Table('user_puzzle'):
+    id = db.Column(db.Integer, primary_key=True)
+    db.Column('puzzle_id', db.Integer, db.ForeignKey('puzzle.id'))
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+    status = db.Column(db.String(15))
 
 # attempt = Table(db.model):
     # puzzle key
