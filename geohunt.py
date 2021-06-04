@@ -6,12 +6,17 @@ app.config['SECRET_KEY'] = 'password'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/database.db'
 db = SQLAlchemy(app)
 
-attempts = db.Table('user_puzzle',
-    db.Column('id', db.Integer, primary_key=True),
-    db.Column('puzzle_id', db.Integer, db.ForeignKey('puzzle.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('status', (db.String(15)))
-    )
+
+
+
+#attempts written as table 
+# attempts = db.Table('user_puzzle',
+#     db.Column('id', db.Integer, primary_key=True),
+#     db.Column('puzzle_id', db.Integer, db.ForeignKey('puzzle.id')),
+#     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+#     db.Column('status', (db.String(15)))
+#     )
+
     # time_taken
     
 class User(db.Model):
@@ -19,7 +24,9 @@ class User(db.Model):
     username = db.Column(db.String(12))
     first_name = db.Column(db.String(20))
     last_name = db.Column(db.String(20))
-    attempts = db.relationship( 'Puzzle', secondary=attempts, backref='users', lazy='select')
+    puzzles = db.relationship('Puzzle', secondary="attempt")
+    attempts = db.relationship('Attempt', backref='user', lazy='dynamic')
+
 
 ##for printing
     def __str__(self):
@@ -38,7 +45,7 @@ class Puzzle(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     radius_limit = db.Column(db.Float)
-
+    users = db.relationship('User', secondary="attempt")
 
 ##for printing
     def __str__(self):
@@ -55,7 +62,23 @@ def puzzle_serializer(puzzle):
     }
 
 
+class Attempt(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    puzzle_id = db.Column(db.Integer, db.ForeignKey('puzzle.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    status = db.Column((db.String(15)))
+    # puzzle = db.relationship("Puzzle")
+ 
+    def __str__(self):
+        return f'{self.id}, {self.puzzle_id}, {self.user_id}, {self.status}'
 
+def attempt_serializer(attempt):
+    return {
+        'id': attempt.id,
+        'puzzle_id': attempt.puzzle_id,
+        'user_id': attempt.user_id,
+        'status': attempt.status
+    }
 
 
 @app.route('/users', methods=['GET', 'POST'])
