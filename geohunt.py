@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'password'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
@@ -60,8 +61,8 @@ class Attempt(db.Model):
     puzzle_id = db.Column(db.Integer, db.ForeignKey('puzzle.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     status = db.Column((db.String(15)))
-    user = db.relationship(User, backref=db.backref('attempt', cascade="all, delete-orphan"))
-    puzzle = db.relationship(Puzzle, backref=db.backref('attempt', cascade="all, delete-orphan"))    
+    user = db.relationship(User, backref=db.backref('attempts', cascade="all, delete-orphan"))
+    puzzle = db.relationship(Puzzle, backref=db.backref('attempts', cascade="all, delete-orphan"))    
 
     def __str__(self):
         return f'{self.id}, {self.puzzle_id}, {self.user_id}, {self.status}'
@@ -122,10 +123,106 @@ def greet(name):
 def anotherPage():
     return 'Welcome to another Geo Hunt page!'
 
+@app.cli.command('initdb')
+def reset_db():
+    db.drop_all()
+    db.create_all()
+
+    print("database has been created")
+
+@app.cli.command("seed")
+def seed_db():
+    db.drop_all()
+    db.create_all()
+
+    db.session.add(
+        User(
+            username= "thatsabbie",
+            first_name= "abbie",
+            last_name= "coghlan"
+        )
+    )
+
+    db.session.add(
+        User(
+            username= "thatsmarc",
+            first_name= "marc",
+            last_name= "ferraro"
+        )
+    )
+
+    db.session.add(
+        Puzzle(
+            title= "Midest is best I",
+            location_name= "The Gateway Arch",
+            latitude= 38.6247,
+            longitude= -90.1848,
+            radius_limit= 0.04
+        )
+    )
+
+    db.session.add(
+        Puzzle(
+            title= "Midest is best II",
+            location_name= "Cloudgate - The Bean",
+            latitude= 41.8827,
+            longitude= -87.6233,
+            radius_limit= 0.04
+        )
+    )
+
+    db.session.add(
+        Attempt(
+            user_id= 1,
+            puzzle_id= 1,
+            status= "incomplete"
+        )
+    )
+    
+    db.session.add(
+        Attempt(
+            user_id= 1,
+            puzzle_id= 1,
+            status= "complete"
+        )
+    )
+
+    db.session.add(
+        Attempt(
+            user_id= 1,
+            puzzle_id= 2,
+            status= "complete"
+        )
+    )
+
+    db.session.add(
+        Attempt(
+            user_id= 2,
+            puzzle_id= 2,
+            status= "incomplete"
+        )
+    )
+
+    db.session.add(
+        Attempt(
+            user_id= 2,
+            puzzle_id= 2,
+            status= "complete"
+        )
+    )
+
+    db.session.commit()
+
+
+
+
+
 ## this code calls the app.run function and executes the code in this file
 ## now you can call python geohunt.py in the venv and it will run flask
 if __name__ == '__main__':
     app.run(debug=True)
+
+
 
 
 
