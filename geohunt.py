@@ -1,5 +1,7 @@
-from flask import Flask, request, jsonify, json
+from flask import Flask, request, jsonify, json, g
 from flask_sqlalchemy import SQLAlchemy 
+from sqlalchemy import text
+import sqlite3
 
 
 app = Flask(__name__)
@@ -7,6 +9,7 @@ app.config['SECRET_KEY'] = 'password'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
 
 
 class User(db.Model):
@@ -82,12 +85,28 @@ def index():
         return jsonify([*map(user_serializer, User.query.all())])
     if request.method == 'POST':
         request_data = json.loads(request.data)
-        user = User(username=request_data['username'])
-        db.session.add(user)
-        db.session.commit()
+        username = request_data['username']       
+        sqlstatement = "INSERT INTO user ('username') VALUES (?);"
+    
+        db.engine.execute(sqlstatement, username)
+
+        # db.engine.execute("INSERT INTO user (username) VALUES(?)", username)
+
+        # user = User(username=request_data['username'])
+        # db.session.add(user)
+        # db.session.commit()
+        
+        
+        # sql = text('SELECT * FROM user WHERE username = :val', {'val': username})
+        # result = db.engine.execute(sql)
+        # username = [row[0] for row in result]
+        # print(username)
+
+
         return {
-            'name' : user.username
+            'name' : "abbie"
         }
+
 
 @app.route('/users/<int:id>', methods=['GET', 'DELETE'])
 def profile(id):
