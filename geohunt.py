@@ -90,17 +90,15 @@ def index():
     
         db.engine.execute(sqlstatement, username)
 
-        # db.engine.execute("INSERT INTO user (username) VALUES(?)", username)
-
         # user = User(username=request_data['username'])
         # db.session.add(user)
         # db.session.commit()
         
         
-        # sql = text('SELECT * FROM user WHERE username = :val', {'val': username})
-        # result = db.engine.execute(sql)
-        # username = [row[0] for row in result]
-        # print(username)
+        sql = 'SELECT * FROM user WHERE username = ?;'
+        result = db.engine.execute(sql, username)
+        therow = [row[0] for row in result]
+        print(therow)
 
 
         return {
